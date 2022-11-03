@@ -1,10 +1,10 @@
+# frozen_string_literal: true
+
 require './models/user'
 require './lib/message_sender'
 
 class MessageResponder
-  attr_reader :message
-  attr_reader :bot
-  attr_reader :user
+  attr_reader :message, :bot, :user
 
   def initialize(options)
     @bot = options[:bot]
@@ -14,17 +14,19 @@ class MessageResponder
 
   def respond
     on /^\/start/ do
-      answer_with_greeting_message
+      start_receiving_messages
+      answer_with_start_message
     end
 
     on /^\/stop/ do
-      answer_with_farewell_message
+      stop_receiving_messages
+      answer_with_stop_message
     end
   end
 
   private
 
-  def on regex, &block
+  def on(regex, &block)
     regex =~ message.text
 
     if $~
@@ -39,12 +41,20 @@ class MessageResponder
     end
   end
 
-  def answer_with_greeting_message
-    answer_with_message I18n.t('greeting_message')
+  def start_receiving_messages
+    user.update(receive_alerts: true)
   end
 
-  def answer_with_farewell_message
-    answer_with_message I18n.t('farewell_message')
+  def stop_receiving_messages
+    user.update(receive_alerts: false)
+  end
+
+  def answer_with_start_message
+    answer_with_message I18n.t('start_message')
+  end
+
+  def answer_with_stop_message
+    answer_with_message I18n.t('stop_message')
   end
 
   def answer_with_message(text)
