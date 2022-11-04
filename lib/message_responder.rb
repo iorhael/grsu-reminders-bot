@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require './models/user'
-require './lib/message_sender'
+require_relative '../models/user'
+require_relative 'message_sender'
 
 class MessageResponder
   attr_reader :message, :bot, :user

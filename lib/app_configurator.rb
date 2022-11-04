@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'logger'
 
-require './lib/database_connector'
+require_relative 'database_connector'
 
 class AppConfigurator
   def configure

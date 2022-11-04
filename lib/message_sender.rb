@@ -1,5 +1,7 @@
-require './lib/reply_markup_formatter'
-require './lib/app_configurator'
+# frozen_string_literal: true
+
+require_relative 'reply_markup_formatter'
+require_relative 'app_configurator'
 
 class MessageSender
   attr_reader :bot

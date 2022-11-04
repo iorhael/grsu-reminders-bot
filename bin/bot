@@ -2,8 +2,8 @@
 
 require 'telegram/bot'
 
-require './lib/message_responder'
-require './lib/app_configurator'
+require_relative '../lib/message_responder'
+require_relative '../lib/app_configurator'
 
 config = AppConfigurator.new
 config.configure

@@ -8,8 +8,8 @@ require 'active_record'
 require 'yaml'
 
 require 'telegram/bot'
-require './lib/app_configurator'
-require './models/user'
+require_relative 'lib/app_configurator'
+require_relative 'models/user'
 
 namespace :users do
   desc 'Notify users about movement'
