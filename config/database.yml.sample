@@ -1,5 +1,5 @@
 adapter: postgresql
-database: telegrambotboilerplate
+database: bird_watcher_bot
 encoding: unicode
 pool: 5
 timeout: 5000

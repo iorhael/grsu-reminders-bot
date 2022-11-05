@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-Dir.chdir('/home/egor/bot') do
+Dir.chdir(ENV['APP_HOME'] || '/home/egor/bot') do
   system './bin/bot'
 end
