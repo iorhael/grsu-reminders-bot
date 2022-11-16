@@ -23,7 +23,13 @@ namespace :users do
 
     User.where(receive_alerts: true).each do |user|
       puts "Sending message to #{user.uid}"
-      bot.api.send_video(chat_id: user.uid, video: file_to_send, caption: file_caption)
+      case file_to_send
+      when Multipart::Post::UploadIO
+        message = bot.api.send_video(chat_id: user.uid, video: file_to_send, caption: file_caption)
+        file_to_send = message['result']['video']['file_id']
+      when String
+        bot.api.send_video(chat_id: user.uid, video: file_to_send, caption: file_caption)
+      end
     end
   end
 end
