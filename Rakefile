@@ -16,8 +16,7 @@ namespace :users do
   task :notify, [:filename] do |_, args|
     config = AppConfigurator.new
     config.configure
-    token = config.get_token
-    bot = Telegram::Bot::Client.new(token)
+    bot = Telegram::Bot::Client.new(config.token)
 
     file_to_send = Faraday::UploadIO.new(args[:filename], 'video/mkv')
     file_caption = "Motion was detected at #{Time.now.getlocal('+03:00')}"
