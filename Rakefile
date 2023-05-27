@@ -5,32 +5,23 @@ require 'bundler/setup'
 
 require 'pg'
 require 'active_record'
+require 'active_support'
 require 'yaml'
+
+require 'pry-byebug'
 
 require 'telegram/bot'
 require_relative 'lib/app_configurator'
-require_relative 'models/user'
+Dir.glob(File.join('models', '**', '*.rb'), &method(:require_relative))
+Dir.glob(File.join('services', '**', '*.rb'), &method(:require_relative))
 
-namespace :users do
-  desc 'Notify users about movement'
-  task :notify, [:filename] do |_, args|
+namespace :shedule do
+  task :get do
     config = AppConfigurator.new
     config.configure
     bot = Telegram::Bot::Client.new(config.token)
 
-    file_to_send = Faraday::UploadIO.new(args[:filename], 'video/mkv')
-    file_caption = "Motion was detected at #{Time.now.getlocal('+03:00')}"
-
-    User.where(receive_alerts: true).each do |user|
-      puts "Sending message to #{user.uid}"
-      case file_to_send
-      when Multipart::Post::UploadIO
-        message = bot.api.send_video(chat_id: user.uid, video: file_to_send, caption: file_caption)
-        file_to_send = message['result']['video']['file_id']
-      when String
-        bot.api.send_video(chat_id: user.uid, video: file_to_send, caption: file_caption)
-      end
-    end
+    Data::Updater.new.call
   end
 end
 
