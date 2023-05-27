@@ -26,7 +26,6 @@ class Data
           lesson.assign_attributes(attributes_to_update)
           lesson.teacher_id = teacher_id
           lesson.save
-          lesson_updated.call
         end
       end
 
