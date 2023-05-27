@@ -63,7 +63,7 @@ class Data
       date_from_formatted = format_date(date_frame.first)
       date_to_formatted = format_date(date_frame.last)
 
-      with_logging :groups, group_ids.count do |updated|
+      with_logging :groups do |updated|
         group_ids.each do |group_id|
           fetcher.group_schedule(group_id, date_from_formatted, date_to_formatted)&.each do |lessons_at_date_json|
             Data::Updater::Lessons.new(lessons_at_date_json, group_id).call
@@ -73,9 +73,9 @@ class Data
       end
     end
 
-    def with_logging(object_name, total_count = nil)
-      updated_count = 0
+    def with_logging(object_name)
       plural_object_name = object_name.to_s.pluralize
+      updated_count = 0
 
       updated = lambda do
         updated_count += 1
@@ -84,7 +84,7 @@ class Data
 
       yield(updated)
 
-      puts "Updated #{updated_count} #{plural_object_name} out of #{total_count}"
+      puts "Updated #{updated_count} #{plural_object_name}"
     end
 
     def format_date(date)
