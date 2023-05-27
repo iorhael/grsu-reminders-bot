@@ -117,13 +117,17 @@ If you have some proposals how to improve this boilerplate feel free to open iss
 
 https://api.grsu.by/1.x/app1/getDepartments?lang=ru_RU
 
+```json
 {"items":[{"id":"2","title":"дневная форма"},{"id":"3","title":"заочная форма"},{"id":"4","title":"вечерняя форма"},{"id":"5","title":"дистанционная форма"},{"id":"6","title":"соискательство"}]}
+```
 
 ### Получение списка факультетов
 
 https://api.grsu.by/1.x/app1/getFaculties?lang=ru_RU
 
+```json
 {"items":[{"id":"3952","title":"Военный факультет"},{"id":"4907","title":"Инженерно-строительный факультет"}]}
+```
 
 ### Получение списка учителей (по факту, и иных лиц - внешних и, видимо, сотрудников, по крайней мере некоторых)
 
@@ -131,6 +135,7 @@ http://api.grsu.by/1.x/app1/getTeachers?sort=surname,name&fields=surname,name,pa
 
 Факт: поле fields игнорируется, и его в запрос имеет смысл включать только для мимикрирования под родное приложение.
 
+```json
 {"count":1069,
 "items":[
 {"id":"3","name":"Татьяна","surname":"Гимпель","patronym":"Михайловна","post":"ст.пр.","phone":"","descr":"","email":"t.himpel@grsu.by","skype":""},
@@ -138,12 +143,15 @@ http://api.grsu.by/1.x/app1/getTeachers?sort=surname,name&fields=surname,name,pa
 {"id":"93","name":"Олег","surname":"Коляго","patronym":"Владимирович","post":"ст.пр.","phone":"","descr":"","email":"okaliaha@grsu.by","skype":""}
 ]
 }
+```
 
 ### Получение списка групп и их айди
 
 http://api.grsu.by/1.x/app1/getGroups?departmentId=2&facultyId=3&course=1&lang=ru_RU
 
+```json
 {"items":[{"id":"13127","title":"СДП-ПМ-211"},{"id":"13119","title":"СДП-ПОИТ-211"},{"id":"13120","title":"СДП-ПОИТ-212"},{"id":"13121","title":"СДП-ПОИТ-213"}]}
+```
 
 ### Получение расписания по айди группы
 
@@ -152,7 +160,7 @@ http://api.grsu.by/1.x/app1/getGroupSchedule?groupId=13120&dateStart=30.09.2021&
 Важно: содержит информацию по всем подгруппам (по лабораторным и физкультурным).
 
 ТуДу: проверить, что если подставить айди подгруппы.
-
+```json
 {"count":2,"days":[
 {"num":"4","count":13,"date":"2021-09-30","lessons":[
 {"timeStart":"08:30","timeEnd":"09:50","teacher":{"id":"30016","fullname":"Флерко Александр Леонидович","post":"Старший преподаватель"},"label":"","type":"практ. зан.","title":"Физическая культура","address":"Захарова, 32","room":"Спортивный комплекс","subgroup":{"id":"13498","title":"СДР-ФаМИ-211.6.1"}},
@@ -170,12 +178,15 @@ http://api.grsu.by/1.x/app1/getGroupSchedule?groupId=13120&dateStart=30.09.2021&
 {"timeStart":"16:40","timeEnd":"18:00","teacher":{"id":"55084","fullname":"Бич Наталья Николаевна","post":"Доцент"},"label":"","type":"практ. зан.","title":"Организация и функционир. компьют. систем","address":"БЛК, 5","room":"405","subgroup":{"id":"0","title":""}}]},
 {"num":"5","count":1,"date":"2021-10-01","lessons":[
 {"timeStart":"18:15","timeEnd":"19:35","teacher":{"id":"30016","fullname":"Флерко Александр Леонидович","post":"Старший преподаватель"},"label":"","type":"практ. зан.","title":"Физическая культура (легкая атлетика)","address":"Захарова, 32","room":"Спортивный комплекс","subgroup":{"id":"13600","title":"СДР-УН-211.6.1001"}}]}]}
+```
 
 ### Получение айди студента и минимальной информации об нём по логину
 
 http://api.grsu.by/1.x/app1/getStudent?login=Xhadnyj_DS_21&lang=ru_RU
 
+```json
 {"id":162712,"fullname":"Щадный Даниил Сергеевич","studenttype":"Студент","grouptitle":"СДП-ПОИТ-212","nzach":"2021-2133","k_sgryp":13120,"kvidstud":1}
+```
 
 ### Получение личного расписания по айди студента
 
