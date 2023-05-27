@@ -16,6 +16,7 @@ Dir.glob(File.join('models', '**', '*.rb'), &method(:require_relative))
 Dir.glob(File.join('services', '**', '*.rb'), &method(:require_relative))
 
 namespace :shedule do
+  desc 'Update whole scedule'
   task :get do
     config = AppConfigurator.new
     config.configure
