@@ -12,8 +12,8 @@ class CreateLessons < ActiveRecord::Migration[7.0]
       t.string :room
       t.json :subgroup
 
-      add_belongs_to :teachers, :id, index: true
-      add_belongs_to :groups, :id, index: true
+      t.belongs_to :teacher, index: true
+      t.belongs_to :group, index: true
 
       t.datetime :fetched_at
     end

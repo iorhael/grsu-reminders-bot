@@ -5,8 +5,8 @@ class CreateGroups < ActiveRecord::Migration[7.0]
     create_table :groups, force: true do |t|
       t.string :title
 
-      add_belongs_to :departments, :id, index: true
-      add_belongs_to :faculties, :id, index: true
+      t.belongs_to :department, index: true
+      t.belongs_to :faculty, index: true
 
       t.integer :course
 
