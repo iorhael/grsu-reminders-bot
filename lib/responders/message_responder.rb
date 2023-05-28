@@ -21,23 +21,9 @@ class Responders
         authenticate(user)
       end
 
-      on /^\/department (\d*)/ do |department_id|
-        binding.pry
-        authenticate(user)
-      end
-
-      on /^\/faculty (\d*)/ do |faculty_id|
-        authenticate(user)
-      end
-
-      on /^\/group (\d*)/ do |group_id|
-        authenticate(user)
-      end
-
-      on /^\/stop/ do
-        logout_user
-        stop_receiving_messages
-        answer_with_stop_message
+      on /^\/logout/ do
+        logout(user)
+        respond_with_logout_message
       end
     end
 
@@ -58,20 +44,12 @@ class Responders
       end
     end
 
-    def start_receiving_messages
-      user.update(receive_alerts: true)
+    def logout(user)
+      User::Logouter.new(user).call
     end
 
-    def stop_receiving_messages
-      user.update(receive_alerts: false)
-    end
-
-    def answer_with_start_message
-      answer_with_message I18n.t('start_message')
-    end
-
-    def answer_with_stop_message
-      answer_with_message I18n.t('stop_message')
+    def respond_with_logout_message
+      answer_with_message('Have a great day! Thanks for using our bot!')
     end
 
     def answer_with_message(text)
