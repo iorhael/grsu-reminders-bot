@@ -34,6 +34,11 @@ class Responders
           answer_callback_query(message) do
             authenticate(user)
           end
+        when :notificate
+          update_users_notificate(value)
+          answer_callback_query(message) do
+            edit_settings_message(user, message)
+          end
         end
       end
     end
@@ -42,7 +47,7 @@ class Responders
 
     def answer_callback_query(message)
       bot.api.answer_callback_query(callback_query_id: message.id)
-      yield
+      yield if block_given?
     rescue Telegram::Bot::Exceptions::ResponseError
       puts '[ERROR] Callback was processed to late!'
     end
@@ -60,6 +65,23 @@ class Responders
     def update_users_group_id(group_id)
       user.group_id = group_id
       user.save!
+    end
+
+    def update_users_notificate(notificate)
+      user.notificate = notificate
+      user.save!
+    end
+
+    def edit_settings_message(user, message)
+      notificate_button_action = user.notificate ? 'Disable' : 'Enable'
+      notificate_button_text = "#{notificate_button_action} notifications"
+
+      notificate_state = user.notificate ? 'Enabled' : 'Disabled'
+      settings_text = "Bot settings:\nNotifications -> #{notificate_state}"
+
+      kb = [[Telegram::Bot::Types::InlineKeyboardButton.new(text: notificate_button_text, callback_data: { notificate: !user.notificate }.to_json)]]
+      reply_markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
+      bot.api.edit_message_text(chat_id: message.from.id, message_id: message.message.message_id, text: settings_text, reply_markup: reply_markup)
     end
   end
 end

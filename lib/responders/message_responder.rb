@@ -25,6 +25,10 @@ class Responders
         logout(user)
         respond_with_logout_message
       end
+
+      on /^\/settings/ do
+        respond_with_settings_message(user)
+      end
     end
 
     private
@@ -46,6 +50,18 @@ class Responders
 
     def logout(user)
       User::Logouter.new(user).call
+    end
+
+    def respond_with_settings_message(user)
+      notificate_button_action = user.notificate ? 'Disable' : 'Enable'
+      notificate_button_text = "#{notificate_button_action} notifications"
+
+      notificate_state = user.notificate ? 'Enabled' : 'Disabled'
+      settings_text = "Bot settings:\nNotifications -> #{notificate_state}"
+
+      kb = [[Telegram::Bot::Types::InlineKeyboardButton.new(text: notificate_button_text, callback_data: { notificate: !user.notificate }.to_json)]]
+      markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
+      bot.api.send_message(chat_id: message.chat.id, text: settings_text, reply_markup: markup)
     end
 
     def respond_with_logout_message
