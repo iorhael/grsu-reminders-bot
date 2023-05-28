@@ -31,7 +31,7 @@ namespace :schedule do
     config.configure
     bot = Telegram::Bot::Client.new(config.token)
 
-    Data::Updater.new.call
+    Data::Updater.new(bot).call
   end
 end
 

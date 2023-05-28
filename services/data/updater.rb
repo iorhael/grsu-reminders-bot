@@ -4,6 +4,12 @@ require 'active_support'
 
 class Data
   class Updater
+    attr_reader :bot
+
+    def initialize(bot)
+      @bot = bot
+    end
+
     def call
       update_departments
       update_faculties
@@ -58,15 +64,15 @@ class Data
     end
 
     def update_groups_schedule
-      group_ids = ::Group.all.pluck(:id)
-      date_frame = (Date.today..1.month.from_now.to_date)
+      group_ids = ::Group.all.where(id: User.all.pluck(:group_id)).pluck(:id)
+      date_frame = (Date.today..1.day.from_now)
       date_from_formatted = format_date(date_frame.first)
       date_to_formatted = format_date(date_frame.last)
 
       with_logging :groups do |updated|
         group_ids.each do |group_id|
           fetcher.group_schedule(group_id, date_from_formatted, date_to_formatted)&.each do |lessons_at_date_json|
-            Data::Updater::Lessons.new(lessons_at_date_json, group_id).call
+            Data::Updater::Lessons.new(lessons_at_date_json, group_id, bot: bot).call
             updated.call
           end
         end

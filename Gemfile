@@ -2,14 +2,16 @@
 
 source 'https://rubygems.org'
 
-gem 'telegram-bot-ruby'
 gem 'activerecord'
 gem 'activesupport'
 gem 'i18n'
 gem 'pg'
 gem 'rake'
+gem 'telegram-bot-ruby'
 
 gem 'pry-byebug'
 
 gem 'faraday'
 gem 'faraday-retry'
+
+gem 'whenever', require: false

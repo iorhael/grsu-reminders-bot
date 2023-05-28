@@ -9,7 +9,7 @@ class Responders
       return choose_faculty unless user.faculty
       return choose_group unless user.group
 
-      welcome_message
+      send_welcome_message
     end
 
     def choose_department
@@ -36,8 +36,8 @@ class Responders
         bot.api.send_message(chat_id: chat_id, text: 'Choose group', reply_markup: markup)
     end
 
-    def welcome_message
-      bot.api.send_message(chat_id: chat_id, text: 'Welcome, wanderer!')
+    def send_welcome_message
+      bot.api.send_message(chat_id: chat_id, text: "Welcome, wanderer!\nBot settings -> /settings")
     end
 
     def chat_id
