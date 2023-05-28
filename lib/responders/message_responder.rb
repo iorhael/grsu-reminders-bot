@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 require_relative '../message_sender'
+require_relative 'user_authentication'
 require 'pry-byebug'
 
 class Responders
   class MessageResponder
+    include Responders::UserAuthentication
+
     attr_reader :message, :bot, :user
 
     def initialize(options)
@@ -15,20 +18,20 @@ class Responders
 
     def respond
       on /^\/start/ do
-        process_user_message
+        authenticate(user)
       end
 
       on /^\/department (\d*)/ do |department_id|
         binding.pry
-        process_user_message
+        authenticate(user)
       end
 
       on /^\/faculty (\d*)/ do |faculty_id|
-        process_user_message
+        authenticate(user)
       end
 
       on /^\/group (\d*)/ do |group_id|
-        process_user_message
+        authenticate(user)
       end
 
       on /^\/stop/ do
@@ -53,43 +56,6 @@ class Responders
           yield $1, $2
         end
       end
-    end
-
-    def process_user_message
-      choose_department unless user.department
-      choose_faculty unless user.faculty
-      choose_group unless user.group
-    end
-
-    def choose_department
-      kb = []
-      ::Department.all.each do |department|
-        { department: department.id }.to_json
-        kb.push([Telegram::Bot::Types::InlineKeyboardButton.new(text: department.title, callback_data: { department: department.id }.to_json)])
-      end
-      markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
-      bot.api.send_message(chat_id: message.chat.id, text: 'Choose department', reply_markup: markup)
-    end
-
-    def choose_faculty
-      kb = []
-      ::Faculty.all.each do |faculty|
-        { faculty: faculty.id }.to_json
-        kb.push([Telegram::Bot::Types::InlineKeyboardButton.new(text: faculty.title, callback_data: { faculty: faculty.id }.to_json)])
-      end
-      markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
-      bot.api.send_message(chat_id: message.chat.id, text: 'Choose faculty', reply_markup: markup)
-    end
-
-    def choose_group
-      binding.pry
-      kb = []
-      ::Group.where(department_id: user.department_id, faculty_id: user.faculty_id).each do |group|
-        { group: group.id }.to_json
-        kb.push([Telegram::Bot::Types::InlineKeyboardButton.new(text: group.title, callback_data: { group: group.id }.to_json)])
-      end
-      markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
-      bot.api.send_message(chat_id: message.chat.id, text: 'Choose department', reply_markup: markup)
     end
 
     def start_receiving_messages
