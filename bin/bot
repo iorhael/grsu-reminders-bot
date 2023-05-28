@@ -3,7 +3,6 @@
 
 require 'telegram/bot'
 
-require_relative '../lib/message_responder'
 require_relative '../lib/app_configurator'
 
 config = AppConfigurator.new
@@ -18,7 +17,12 @@ Telegram::Bot::Client.run(token) do |bot|
   bot.listen do |message|
     options = { bot:, message: }
 
-    #logger.debug "#{message.from.username} @#{message.from.id}: #{message.text}"
-    MessageResponder.new(options).respond
+    case message
+    when Telegram::Bot::Types::CallbackQuery
+      Responders::CallbackQueryResponder.new(options).respond
+    when Telegram::Bot::Types::Message
+      logger.debug "#{message.from.username} @#{message.from.id}: #{message.text}"
+      Responders::MessageResponder.new(options).respond
+    end
   end
 end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'logger'
+require 'json'
 
 require_relative 'database_connector'
 
@@ -33,6 +34,7 @@ class AppConfigurator
 
   def load_dependecies
     Dir.glob(File.join('models', '**', '*.rb'), &method(:require_relative))
-    Dir.glob(File.join('services', '**', '*.rb'), &method(:require_relative)) 
+    Dir.glob(File.join('services', '**', '*.rb'), &method(:require_relative))
+    Dir.glob(File.join('lib', '**', '*.rb'), &method(:require_relative))
   end
 end
