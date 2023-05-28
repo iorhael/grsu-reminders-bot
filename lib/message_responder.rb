@@ -2,6 +2,7 @@
 
 require_relative '../models/user'
 require_relative 'message_sender'
+require 'pry-byebug'
 
 class MessageResponder
   attr_reader :message, :bot, :user
@@ -14,11 +15,25 @@ class MessageResponder
 
   def respond
     on /^\/start/ do
-      start_receiving_messages
-      answer_with_start_message
+      process_user_message
+
+    end
+
+    on /^\/department (\d*)/ do |department_id|
+      binding.pry
+      process_user_message
+    end
+
+    on /^\/faculty (\d*)/ do |faculty_id|
+      process_user_message
+    end
+
+    on /^\/group (\d*)/ do |group_id|
+      process_user_message
     end
 
     on /^\/stop/ do
+      logout_user
       stop_receiving_messages
       answer_with_stop_message
     end
@@ -39,6 +54,30 @@ class MessageResponder
         yield $1, $2
       end
     end
+  end
+
+  def process_user_message
+    choose_department #unless user.department
+    # choose_faculty unless user.faculty
+    # choose_group unless user.group
+  end
+
+  def choose_department
+    binding.pry
+    kb = []
+    ::Department.all.each do |department|
+      kb.push([Telegram::Bot::Types::InlineKeyboardButton.new(text: department.title, callback_data: "department #{department.id}")])
+    end
+    markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
+    bot.api.send_message(chat_id: message.chat.id, text: 'Choose department', reply_markup: markup)
+  end
+
+  def choose_faculty
+
+  end
+
+  def choose_group
+
   end
 
   def start_receiving_messages

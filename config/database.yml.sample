@@ -1,5 +1,5 @@
 adapter: postgresql
-database: bird_watcher_bot
+database: grsu_reminders_bot
 encoding: unicode
 pool: 5
 timeout: 5000

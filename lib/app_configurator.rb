@@ -8,6 +8,7 @@ class AppConfigurator
   def configure
     setup_i18n
     setup_database
+    load_dependecies
   end
 
   def token
@@ -28,5 +29,10 @@ class AppConfigurator
 
   def setup_database
     DatabaseConnector.establish_connection
+  end
+
+  def load_dependecies
+    Dir.glob(File.join('models', '**', '*.rb'), &method(:require_relative))
+    Dir.glob(File.join('services', '**', '*.rb'), &method(:require_relative)) 
   end
 end
