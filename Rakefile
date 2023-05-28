@@ -15,6 +15,12 @@ require_relative 'lib/app_configurator'
 Dir.glob(File.join('models', '**', '*.rb'), &method(:require_relative))
 Dir.glob(File.join('services', '**', '*.rb'), &method(:require_relative))
 
+desc 'Open console with all loaded dependencies'
+task :console do
+  binding.pry # rubocop:disable Lint/Debugger
+end
+task c: :console
+
 namespace :shedule do
   desc 'Update whole schedule'
   task :get do
