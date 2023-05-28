@@ -17,11 +17,14 @@ Dir.glob(File.join('services', '**', '*.rb'), &method(:require_relative))
 
 desc 'Open console with all loaded dependencies'
 task :console do
+  config = AppConfigurator.new
+  config.configure
+  bot = Telegram::Bot::Client.new(config.token)
   binding.pry # rubocop:disable Lint/Debugger
 end
 task c: :console
 
-namespace :shedule do
+namespace :schedule do
   desc 'Update whole schedule'
   task :get do
     config = AppConfigurator.new
