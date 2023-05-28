@@ -8,6 +8,8 @@ class Responders
       return choose_department unless user.department
       return choose_faculty unless user.faculty
       return choose_group unless user.group
+
+      welcome_message
     end
 
     def choose_department
@@ -38,6 +40,10 @@ class Responders
       end
       markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
       bot.api.send_message(chat_id: chat_id, text: 'Choose group', reply_markup: markup)
+    end
+
+    def welcome_message
+      bot.api.send_message(chat_id: chat_id, text: 'Welcome, wanderer!')
     end
 
     def chat_id

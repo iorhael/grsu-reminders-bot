@@ -20,18 +20,18 @@ class Responders
       response_data.each do |attribute, value|
         case attribute
         when :department
-          update_users_department_id(value)
-          answer_callback_query(message, 'Department chosen successfully!') do
+          update_users_department_id(value) unless user.department
+          answer_callback_query(message) do
             authenticate(user)
           end
         when :faculty
-          update_users_faculty_id(value)
-          answer_callback_query(message, 'Faculty chosen successfully!') do
+          update_users_faculty_id(value) unless user.faculty
+          answer_callback_query(message) do
             authenticate(user)
           end
         when :group
-          update_users_group_id(value)
-          answer_callback_query(message, 'Group chosen successfully!') do
+          update_users_group_id(value) unless user.group
+          answer_callback_query(message) do
             authenticate(user)
           end
         end
@@ -40,8 +40,8 @@ class Responders
 
     private
 
-    def answer_callback_query(message, respond_with_text)
-      bot.api.answer_callback_query(callback_query_id: message.id, text: respond_with_text)
+    def answer_callback_query(message)
+      bot.api.answer_callback_query(callback_query_id: message.id)
       yield
     rescue Telegram::Bot::Exceptions::ResponseError
       puts '[ERROR] Callback was processed to late!'
