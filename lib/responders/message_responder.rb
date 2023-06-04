@@ -21,6 +21,15 @@ class Responders
         authenticate(user)
       end
 
+      on /^\/login/ do
+        authenticate(user)
+      end
+
+      on /^\/stop/ do
+        logout(user)
+        respond_with_logout_message
+      end
+
       on /^\/logout/ do
         logout(user)
         respond_with_logout_message
