@@ -15,6 +15,20 @@ require_relative 'lib/app_configurator'
 Dir.glob(File.join('models', '**', '*.rb'), &method(:require_relative))
 Dir.glob(File.join('services', '**', '*.rb'), &method(:require_relative))
 
+desc 'Configure environment'
+task :environment do
+  AppConfigurator.new.configure
+end
+
+desc 'Annotate models'
+task :annotate do
+  require 'annotate'
+
+  Annotate.set_defaults('models' => 'true', 'model_dir' => 'models')
+  Annotate.load_tasks
+  Rake::Task['annotate_models'].invoke
+end
+
 desc 'Open console with all loaded dependencies'
 task :console do
   config = AppConfigurator.new
@@ -41,6 +55,8 @@ namespace :db do
     connection_details = YAML.load(File.open('config/database.yml'))
     ActiveRecord::Base.establish_connection(connection_details)
     ActiveRecord::MigrationContext.new('db/migrate').migrate
+
+    Rake::Task['annotate'].invoke
   end
 
   desc 'Create the database'

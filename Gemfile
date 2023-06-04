@@ -15,3 +15,7 @@ gem 'faraday'
 gem 'faraday-retry'
 
 gem 'whenever', require: false
+
+group :development do
+  gem 'annotate'
+end
