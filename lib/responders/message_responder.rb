@@ -21,9 +21,16 @@ class Responders
         authenticate(user)
       end
 
+      on /^\/login/ do
+        authenticate(user)
+      end
+
+      on /^\/stop/ do
+        logout(user)
+      end
+
       on /^\/logout/ do
         logout(user)
-        respond_with_logout_message
       end
 
       on /^\/settings/ do
@@ -50,6 +57,7 @@ class Responders
 
     def logout(user)
       User::Logouter.new(user).call
+      respond_with_logout_message
     end
 
     def respond_with_settings_message(user)
